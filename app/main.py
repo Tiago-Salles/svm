@@ -1,4 +1,5 @@
 
+from cgi import test
 from click import command
 import pandas
 import numpy
@@ -13,7 +14,15 @@ import seaborn
 
 def main():
     file = pandas.read_csv("C:\\Users\\Houseasy - Frontend\\Documents\\Development\\svm_project\\commands/commands.csv")
-    file.head(3)
-    seaborn.countplot(y="Izzy", data=file)
-    
+    x = []
+    for data in range(file.shape[0]):
+        x.append(file.iloc[data][1])
+    y = numpy.array(file["Commands"])
+    x_train, x_test, y_train, Y_test = train_test_split(x, y, test_size=0.3)
+    model = Pipeline([
+        ("vectorizer", CountVectorizer())
+        ("tfidf", TfidfTransformer())
+        ("clf", LinearSVC(C=0.2))
+    ])
+    model.fit(x_train, y_train)
 main()
